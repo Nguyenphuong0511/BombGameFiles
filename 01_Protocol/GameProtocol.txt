@@ -1,0 +1,83 @@
+============================================================
+GIAO THỨC GAME TRUYỀN BOM - BẢN HOÀN CHỈNH (FULL PROTOCOL)
+============================================================
+
+GIAI ĐOẠN 1: TÀI KHOẢN & XÁC THỰC (ACCOUNT)
+------------------------------------------------------------
+- ĐĂNG KÝ (Register):
+  {"Action": "REGISTER", "Username": "abc", "Password": "123", "Character": "Ninja"}
+
+- ĐĂNG NHẬP (Login):
+  {"Action": "LOGIN", "Username": "abc", "Password": "123"}
+
+- QUÊN MẬT KHẨU (Forgot Password):
+  {"Action": "FORGOT_PASSWORD", "Username": "abc", "SecurityAnswer": "TenConMeo"}
+
+- KẾT QUẢ TỪ SERVER:
+  {"Action": "LOGIN_SUCCESS", "Id": 101, "Username": "abc", "Message": "Thành công"}
+  {"Action": "LOGIN_FAIL", "Message": "Sai tài khoản/mật khẩu"}
+  {"Action": "FORGOT_PASS_SUCCESS", "NewPassword": "xyz"}
+
+
+GIAI ĐOẠN 2: QUẢN LÝ PHÒNG (LOBBY) - ĐỒNG BỘ 4-10 NGƯỜI
+------------------------------------------------------------
+- TẠO PHÒNG (Create Room):
+  {"Action": "CREATE_ROOM", "MaxPlayers": 4} 
+  (Số lượng MaxPlayers do chủ phòng chọn: 4, 6, 8, hoặc 10)
+
+- VÀO PHÒNG (Join Room):
+  {"Action": "JOIN_ROOM", "RoomCode": "ABC123"}
+
+- SẴN SÀNG (Ready):
+  {"Action": "READY", "IsReady": true}
+
+- CẬP NHẬT TRẠNG THÁI PHÒNG (UPDATE_ROOM_STATUS):
+  (Server gửi cho TẤT CẢ mọi người khi có ai đó vào/ra/ready)
+  {
+    "Action": "UPDATE_ROOM_STATUS",
+    "Data": {
+      "RoomID": 1,
+      "RoomCode": "ABC123",
+      "CurrentCount": 2,      <-- Hiển thị số đang có (ví dụ: 2)
+      "MaxPlayers": 4,        <-- Hiển thị số tối đa (ví dụ: 4) -> tạo ra "2/4"
+      "IsAllReady": false,
+      "Members": [
+        {"Id": 101, "Name": "ChuPhong", "IsReady": true, "IsHost": true, "Character": "Ninja"},
+        {"Id": 102, "Name": "Player2", "IsReady": false, "IsHost": false, "Character": "Rambo"}
+      ]
+    }
+  }
+
+
+GIAI ĐOẠN 3: TRONG TRẬN ĐẤU (GAMEPLAY)
+------------------------------------------------------------
+- BẮT ĐẦU (Start Game):
+  {"Action": "GAME_START", "InitialBombHolderId": 101, "TimeLimit": 300}
+
+- DI CHUYỂN (Move):
+  {"Action": "MOVE", "Position": "10.5,0,5.2", "RoomId": 1}
+
+- TRUYỀN BOM (Pass Bomb):
+  {"Action": "PASS_BOMB", "To": "Player2", "RoomId": 1}
+
+- THÔNG BÁO CẦM BOM (Assigned):
+  {"Action": "BOMB_ASSIGNED", "holderId": 101, "holderName": "ChuPhong", "roomId": 1}
+
+- CẬP NHẬT THỜI GIAN (Tick):
+  {"Action": "BOMB_PASSED", "toId": 102, "toName": "Player2", "bombTimeLeft": 15.0}
+
+
+GIAI ĐOẠN 4: KẾT THÚC & LỖI (END GAME)
+------------------------------------------------------------
+- BOM NỔ (Explode):
+  {"Action": "EXPLODE", "LoserID": 102, "LoserName": "Player2"}
+
+- NGƯỜI CHƠI THOÁT (Player Out):
+  {"Action": "PLAYER_OUT", "player": "Player2", "playerId": 102}
+
+- ĐÓNG PHÒNG (Room Closed):
+  {"Action": "ROOM_CLOSED", "roomId": 1, "reason": "Chủ phòng thoát"}
+
+- THÔNG BÁO LỖI (Error):
+  {"Action": "ERROR", "message": "Nội dung lỗi chi tiết tại đây"}
+============================================================

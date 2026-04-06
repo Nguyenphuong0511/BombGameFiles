@@ -1,0 +1,49 @@
+# --- [ Unity ] ---
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[MemoryCaptures/
+UserSettings/
+MemoryCaptures/
+!/Assets/Photon/Fusion/Resources/FusionConfig.asset
+
+# Chặn các file định danh cá nhân của Unity
+*.bak
+*.user
+*.userprefs
+
+# --- [ Photon Fusion Specific ] ---
+# Giữ lại các cấu hình quan trọng của Fusion nhưng chặn các file tạm
+/Assets/Photon/Fusion/Scripts/Editor/Loom/
+
+# --- [ Visual Studio / C# ] ---
+.vs/
+[Bb]in/
+[Oo]bj/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.svclog
+*.openedition
+
+# --- [ OS / IDE Rác ] ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.orig
+*.dat
+*.apk
+*.unitypackage
+
+# --- [ NuGet / Packages ] ---
+# Unity tự tải lại Packages dựa trên manifest.json, không nên đẩy cả thư mục lên
+/Packages/*
+!/Packages/manifest.json
+!/Packages/packages-lock.json
